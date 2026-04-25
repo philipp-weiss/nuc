@@ -1,0 +1,44 @@
+{
+  description = "NixOS NUC Konfiguration";
+
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.05";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+  };
+
+  outputs = { self, nixpkgs, disko, ... }:
+  let
+    system = "x86_64-linux";
+    pkgs = nixpkgs.legacyPackages.${system};
+  in
+  {
+    # Installer-ISO mit r8125 Treiber
+    packages.${system}.isoImage = (nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+        {
+          boot.extraModulePackages = [ pkgs.linuxPackages.r8125 ];
+          boot.supportedFilesystems = [ "zfs" ];
+
+          # Konfiguration ist auf der ISO vorinstalliert
+          environment.etc."nixos-config".source = ./.;
+
+          environment.systemPackages = with pkgs; [ git ];
+        }
+      ];
+    }).config.system.build.isoImage;
+
+    # NUC System
+    nixosConfigurations.nuc = nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        disko.nixosModules.disko
+        ./hosts/nuc
+      ];
+    };
+  };
+}
