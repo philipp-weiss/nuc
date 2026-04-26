@@ -2,18 +2,13 @@
 
 ## Vorbereitung
 
-1. NixOS minimal ISO auf USB-Stick schreiben (nixos.org)
-2. NUC vom USB-Stick booten
-3. SSH aktivieren (im Live-System):
-   ```bash
-   sudo systemctl start sshd
-   passwd nixos  # temporäres Passwort setzen
-   ip addr       # IP-Adresse notieren
-   ```
+Boot the custom ISO (includes r8125 driver and this config at `/etc/nixos-config`):
+```bash
+nix build .#isoImage
+```
 
 ## Installation (vom eigenen PC aus)
 
-Diese Konfiguration auf den NUC übertragen:
 ```bash
 nix run github:nix-community/nixos-anywhere -- \
   --flake .#nuc \
@@ -22,11 +17,14 @@ nix run github:nix-community/nixos-anywhere -- \
 
 ## Nach der Installation
 
-SSH-Schlüssel in hosts/nuc/default.nix eintragen, dann:
 ```bash
-ssh phip@<nuc-ip>
-sudo nixos-rebuild switch --flake github:dein-user/nixos-config#nuc
+ssh root@<nuc-ip>
+git clone https://github.com/philipp-weiss/nuc.git ~/nuc
+cd ~/nuc
+sudo nixos-rebuild switch --flake .#nuc
 ```
+
+Secrets müssen manuell erstellt werden — siehe CLAUDE.md.
 
 ## Wichtige Befehle
 
@@ -37,7 +35,7 @@ sudo nixos-rebuild switch --flake .#nuc
 # Konfiguration testen (ohne dauerhaft zu aktivieren)
 sudo nixos-rebuild test --flake .#nuc
 
-# System aktualisieren
+# Flake-Inputs aktualisieren
 nix flake update
 sudo nixos-rebuild switch --flake .#nuc
 ```
