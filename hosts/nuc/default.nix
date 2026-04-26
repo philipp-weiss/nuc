@@ -114,5 +114,12 @@
     options = "--delete-older-than 30d";
   };
 
+  system.autoUpgrade = {
+    enable = true;
+    flake = "github:philipp-weiss/nuc#nuc";
+    dates = "04:00";
+    allowReboot = true;
+  };
+
   system.stateVersion = "25.05";
 }
