@@ -20,6 +20,7 @@
   # Zeitzone & Lokalisierung
   time.timeZone = "Europe/Berlin";
   i18n.defaultLocale = "de_DE.UTF-8";
+  console.keyMap = "de-latin1";
 
   # Benutzer
   users.users.root.openssh.authorizedKeys.keys = [
