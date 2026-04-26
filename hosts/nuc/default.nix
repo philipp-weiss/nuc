@@ -47,6 +47,14 @@
   # ZFS
   boot.supportedFilesystems = [ "zfs" ];
   services.zfs.autoScrub.enable = true;
+  services.zfs.autoSnapshot = {
+    enable = true;
+    frequent = 0;
+    hourly = 0;
+    daily = 7;
+    weekly = 0;
+    monthly = 0;
+  };
 
   # Firewall
   networking.firewall.enable = true;
