@@ -60,6 +60,9 @@
   networking.firewall.enable = true;
   networking.firewall.allowedTCPPorts = [ 8123 ];
 
+  # Home Assistant USB Zigbee Dongle Zugriff
+  users.users.hass.extraGroups = [ "dialout" ];
+
   # Home Assistant
   services.home-assistant = {
     enable = true;
