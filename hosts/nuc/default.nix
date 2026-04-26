@@ -91,6 +91,7 @@
   services.restic.backups.home-assistant = {
     repositoryFile = config.age.secrets.restic-repository.path;
     passwordFile = config.age.secrets.restic-password.path;
+    initialize = true;
     paths = [ "/var/lib/hass" ];
     exclude = [ "/var/lib/hass/home-assistant_v2.db" ];
     timerConfig = {
