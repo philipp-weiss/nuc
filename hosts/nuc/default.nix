@@ -58,6 +58,23 @@
 
   # Firewall
   networking.firewall.enable = true;
+  networking.firewall.allowedTCPPorts = [ 8123 ];
+
+  # Home Assistant
+  services.home-assistant = {
+    enable = true;
+    config = {
+      homeassistant = {
+        name = "Home";
+        time_zone = "Europe/Berlin";
+        unit_system = "metric";
+        currency = "EUR";
+        country = "DE";
+      };
+      default_config = {};
+      http.server_host = "0.0.0.0";
+    };
+  };
 
   # Flakes aktivieren
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
