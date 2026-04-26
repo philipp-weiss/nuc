@@ -84,6 +84,21 @@
     };
   };
 
+  # Restic backup of Home Assistant to testy (append-only, prune runs server-side)
+  age.secrets.restic-repository.file = ../../secrets/restic-repository.age;
+  age.secrets.restic-password.file = ../../secrets/restic-password.age;
+
+  services.restic.backups.home-assistant = {
+    repositoryFile = config.age.secrets.restic-repository.path;
+    passwordFile = config.age.secrets.restic-password.path;
+    paths = [ "/var/lib/hass" ];
+    exclude = [ "/var/lib/hass/home-assistant_v2.db" ];
+    timerConfig = {
+      OnCalendar = "02:00";
+      Persistent = true;
+    };
+  };
+
   # Flakes aktivieren
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
