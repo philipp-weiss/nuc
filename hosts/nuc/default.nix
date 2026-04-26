@@ -69,6 +69,7 @@
     extraComponents = [
       "zha"
       "homeassistant_hardware"
+      "met"
     ];
     config = {
       homeassistant = {
