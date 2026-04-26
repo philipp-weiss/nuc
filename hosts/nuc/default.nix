@@ -93,7 +93,11 @@
     passwordFile = config.age.secrets.restic-password.path;
     initialize = true;
     paths = [ "/var/lib/hass" ];
-    exclude = [ "/var/lib/hass/home-assistant_v2.db" ];
+    exclude = [
+      "/var/lib/hass/home-assistant_v2.db"
+      "/var/lib/hass/home-assistant_v2.db-shm"
+      "/var/lib/hass/home-assistant_v2.db-wal"
+    ];
     timerConfig = {
       OnCalendar = "02:00";
       Persistent = true;
