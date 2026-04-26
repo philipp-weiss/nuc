@@ -66,6 +66,10 @@
   # Home Assistant
   services.home-assistant = {
     enable = true;
+    extraComponents = [
+      "zha"
+      "homeassistant_hardware"
+    ];
     config = {
       homeassistant = {
         name = "Home";
