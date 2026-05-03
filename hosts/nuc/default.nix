@@ -81,6 +81,36 @@
       };
       default_config = {};
       http.server_host = "0.0.0.0";
+      automation = [
+        {
+          id = "garden_watering_start";
+          alias = "Garden watering — start";
+          description = "Open valve Mon/Wed/Sat at 04:00 during growing season";
+          triggers = [
+            { trigger = "time"; at = "04:00:00"; }
+          ];
+          conditions = [
+            { condition = "time"; weekday = [ "mon" "wed" "sat" ]; }
+            { condition = "template"; value_template = "{{ 4 <= now().month <= 10 }}"; }
+          ];
+          actions = [
+            { action = "switch.turn_on"; target.entity_id = "switch.sonoff_swv"; }
+          ];
+          mode = "single";
+        }
+        {
+          id = "garden_watering_stop";
+          alias = "Garden watering — stop (safety)";
+          description = "Always close valve at 06:30, regardless of weekday/season";
+          triggers = [
+            { trigger = "time"; at = "06:30:00"; }
+          ];
+          actions = [
+            { action = "switch.turn_off"; target.entity_id = "switch.sonoff_swv"; }
+          ];
+          mode = "single";
+        }
+      ];
     };
   };
 
