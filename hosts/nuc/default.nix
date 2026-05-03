@@ -85,7 +85,7 @@
         {
           id = "garden_watering_start";
           alias = "Garden watering — start";
-          description = "Open valve Mon/Wed/Sat at 04:00 during growing season";
+          description = "Open valve Mon/Wed/Sat at 04:00 during growing season, unless ≥3 mm rain forecast in next 24h";
           triggers = [
             { trigger = "time"; at = "04:00:00"; }
           ];
@@ -94,6 +94,16 @@
             { condition = "template"; value_template = "{{ 4 <= now().month <= 10 }}"; }
           ];
           actions = [
+            {
+              action = "weather.get_forecasts";
+              data.type = "hourly";
+              target.entity_id = "weather.forecast_home";
+              response_variable = "fcst";
+            }
+            {
+              condition = "template";
+              value_template = "{{ (fcst['weather.forecast_home'].forecast[:24] | sum(attribute='precipitation')) < 3 }}";
+            }
             { action = "switch.turn_on"; target.entity_id = "switch.sonoff_swv"; }
           ];
           mode = "single";
